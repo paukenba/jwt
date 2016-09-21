@@ -27,12 +27,15 @@ class Jws implements SignerInterface
 
     public function getUnsignedValue(Token $token)
     {
-        $jsonHeader    = $token->getHeader()->getParameters()->jsonSerialize();
-        $encodedHeader = $this->encoder->encode($jsonHeader);
+        if ($token->getJwt()) {
+            list ($encodedHeader, $encodedPayload) = explode('.', $token->getJwt());
+        } else {
+            $jsonHeader    = $token->getHeader()->getParameters()->jsonSerialize();
+            $encodedHeader = $this->encoder->encode($jsonHeader);
 
-        $jsonPayload    = $token->getPayload()->getClaims()->jsonSerialize();
-        $encodedPayload = $this->encoder->encode($jsonPayload);
-
+            $jsonPayload    = $token->getPayload()->getClaims()->jsonSerialize();
+            $encodedPayload = $this->encoder->encode($jsonPayload);
+        }
         return sprintf('%s.%s', $encodedHeader, $encodedPayload);
     }
 

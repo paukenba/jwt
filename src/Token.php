@@ -24,6 +24,11 @@ class Token
      */
     private $signature;
 
+    /**
+     * @var string
+     */
+    private $jwt;
+
     public function __construct()
     {
         $this->header  = new Header();
@@ -77,5 +82,21 @@ class Token
     public function setSignature($signature)
     {
         $this->signature = $signature;
+    }
+
+    /**
+     * @param string $jwt
+     */
+    public function setJwt($jwt)
+    {
+        $this->jwt = $jwt;
+    }
+
+    /**
+     * @return string
+     */
+    public function getJwt()
+    {
+        return $this->jwt;
     }
 }

@@ -101,6 +101,8 @@ class Compact implements SerializerInterface
             throw new \InvalidArgumentException('Not a valid JWT string passed for deserialization');
         }
 
+        $token->setJwt($jwt);
+
         list($encodedHeader, $encodedPayload, $encodedSignature) = array_pad(explode('.', $jwt, 3), 3, null);
 
         $decodedHeader    = $this->encoding->decode($encodedHeader);
@@ -130,10 +132,14 @@ class Compact implements SerializerInterface
         $serializedPayload = $token->getPayload()->getClaims()->jsonSerialize();
         $signature         = $token->getSignature();
 
-        return sprintf('%s.%s.%s',
+        $jwt = sprintf('%s.%s.%s',
             $this->encoding->encode($serializedHeader),
             $this->encoding->encode($serializedPayload),
             $this->encoding->encode($signature)
         );
+
+        $token->setJwt($jwt);
+
+        return $jwt;
     }
 }
